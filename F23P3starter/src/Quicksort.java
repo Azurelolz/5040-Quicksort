@@ -20,8 +20,8 @@ import java.util.Scanner;
 /**
  * The class containing the main method.
  *
- * @author {Your Name Here}
- * @version {Put Something Here}
+ * @author Yu-Kai Lo
+ * @version v 1.0
  */
 
 // On my honor:
@@ -196,61 +196,142 @@ public class Quicksort {
         }
         return leftBlock * 4096 + leftIndex;
     }
-
-
-    static void quicksort(
-        BufferPool bufferPool,
-        int leftBlock,
-        int leftIndex,
-        int rightBlock,
-        int rightIndex)
+    
+    
+    static int[] threeWayPartition(BufferPool bufferPool, int leftBlock, int leftIndex, int rightBlock, int rightIndex, short pivot)
         throws Exception {
-//        recCount += 1;
-//        if (recCount >= 10) {
-//            return;
-//        }
-        int pivotindex = findpivot(leftBlock * 4096 + leftIndex, rightBlock
-            * 4096 + rightIndex);
-        int pivotBlock = pivotindex / 4096;
-        swap(bufferPool, pivotBlock, pivotindex % 4096, rightBlock, rightIndex);
-        short pivot = bufferPool.getkey(bufferPool.getblock(
-            rightBlock), rightIndex);
-        int inputRightIndex = rightIndex;
-        int inputRightBlock = rightBlock;
-        if (inputRightIndex - 4 < 0) {
-            inputRightIndex = 4092;
-            inputRightBlock -= 1;
+    int ltBlock = leftBlock, ltIndex = leftIndex;
+    int gtBlock = rightBlock, gtIndex = rightIndex;
+    int iBlock = leftBlock, iIndex = leftIndex;
+
+    // Loop until i index crosses gt index
+    while (iBlock < gtBlock || (iBlock == gtBlock && iIndex <= gtIndex)) {
+        short key = bufferPool.getkey(bufferPool.getblock(iBlock), iIndex);
+
+        if (key < pivot) {
+            swap(bufferPool, ltBlock, ltIndex, iBlock, iIndex);
+            // Move lt pointers forward
+            ltIndex += 4;
+            if (ltIndex >= 4096) {
+                ltIndex = 0;
+                ltBlock++;
+            }
+            // Move i pointers forward
+            iIndex += 4;
+            if (iIndex >= 4096) {
+                iIndex = 0;
+                iBlock++;
+            }
+        } else if (key > pivot) {
+            swap(bufferPool, iBlock, iIndex, gtBlock, gtIndex);
+            // Move gt pointers backward
+            gtIndex -= 4;
+            if (gtIndex < 0) {
+                gtIndex = 4092;
+                gtBlock--;
+            }
+        } else {
+            // Move i pointers forward
+            iIndex += 4;
+            if (iIndex >= 4096) {
+                iIndex = 0;
+                iBlock++;
+            }
         }
-        int k = partition(bufferPool, leftBlock, leftIndex, inputRightBlock,
-            inputRightIndex, pivot);
-        int kBlock = k / 4096;
-//        System.out.println("LeftBlock: " + leftBlock);
-//        System.out.println("LeftIndex: " + leftIndex);
-//        System.out.println("RightBlock: " + rightBlock);
-//        System.out.println("RightIndex: " + rightIndex);
-//        System.out.println("PivotBlock: " + pivotBlock);
-//        System.out.println("PivotIndex: " + pivotindex);
-//        System.out.println("Pivot: " + pivot);
-//        System.out.println("KBlock: " + kBlock);
-//        System.out.println("KIndex: " + k);
-//        bufferPool.printAllIndex();
-//        System.out.println("====================================");
-        swap(bufferPool, kBlock, k % 4096, rightBlock, rightIndex);
-        if (k - (leftBlock * 4096 + leftIndex) > 4) {
-            int newRightIndex = (k - 4) % 4096;
-            int newRightBlock = (k - 4) / 4096;
-//            System.out.println("Go left...");
-            quicksort(bufferPool, leftBlock, leftIndex, newRightBlock,
-                newRightIndex);
-        } // Sort left partition
-        if (rightBlock * 4096 + rightIndex - k > 4) {
-            int newLeftIndex = (k + 4) % 4096;
-            int newLeftBlock = (k + 4) / 4096;
-//            System.out.println("Go right...");
-            quicksort(bufferPool, newLeftBlock, newLeftIndex, rightBlock,
-                rightIndex);
-        } // Sort right partition
     }
+
+    // Return both lt and gt indices (as block and index pairs)
+    return new int[]{ltBlock, ltIndex, gtBlock, gtIndex};
+}
+    
+
+
+//    static void quicksort(
+//        BufferPool bufferPool,
+//        int leftBlock,
+//        int leftIndex,
+//        int rightBlock,
+//        int rightIndex)
+//        throws Exception {
+////        recCount += 1;
+////        if (recCount >= 10) {
+////            return;
+////        }
+//        int pivotindex = findpivot(leftBlock * 4096 + leftIndex, rightBlock
+//            * 4096 + rightIndex);
+//        int pivotBlock = pivotindex / 4096;
+//        swap(bufferPool, pivotBlock, pivotindex % 4096, rightBlock, rightIndex);
+//        short pivot = bufferPool.getkey(bufferPool.getblock(
+//            rightBlock), rightIndex);
+//        int inputRightIndex = rightIndex;
+//        int inputRightBlock = rightBlock;
+//        if (inputRightIndex - 4 < 0) {
+//            inputRightIndex = 4092;
+//            inputRightBlock -= 1;
+//        }
+//        int k = partition(bufferPool, leftBlock, leftIndex, inputRightBlock,
+//            inputRightIndex, pivot);
+//        int kBlock = k / 4096;
+////        System.out.println("LeftBlock: " + leftBlock);
+////        System.out.println("LeftIndex: " + leftIndex);
+////        System.out.println("RightBlock: " + rightBlock);
+////        System.out.println("RightIndex: " + rightIndex);
+////        System.out.println("PivotBlock: " + pivotBlock);
+////        System.out.println("PivotIndex: " + pivotindex);
+////        System.out.println("Pivot: " + pivot);
+////        System.out.println("KBlock: " + kBlock);
+////        System.out.println("KIndex: " + k);
+////        bufferPool.printAllIndex();
+////        System.out.println("====================================");
+//        swap(bufferPool, kBlock, k % 4096, rightBlock, rightIndex);
+//        if (k - (leftBlock * 4096 + leftIndex) > 4) {
+//            int newRightIndex = (k - 4) % 4096;
+//            int newRightBlock = (k - 4) / 4096;
+////            System.out.println("Go left...");
+//            quicksort(bufferPool, leftBlock, leftIndex, newRightBlock,
+//                newRightIndex);
+//        } // Sort left partition
+//        if (rightBlock * 4096 + rightIndex - k > 4) {
+//            int newLeftIndex = (k + 4) % 4096;
+//            int newLeftBlock = (k + 4) / 4096;
+////            System.out.println("Go right...");
+//            quicksort(bufferPool, newLeftBlock, newLeftIndex, rightBlock,
+//                rightIndex);
+//        } // Sort right partition
+//    }
+    
+    static void quicksort(BufferPool bufferPool, int leftBlock, int leftIndex, int rightBlock, int rightIndex)
+        throws Exception {
+    if (rightBlock < leftBlock || (rightBlock == leftBlock && rightIndex <= leftIndex)) {
+        // Base case: 1 element or invalid range
+        return;
+    }
+
+    // Choose pivot and partition around it
+    int pivotindex = findpivot(leftBlock * 4096 + leftIndex, rightBlock * 4096 + rightIndex);
+    int pivotBlock = pivotindex / 4096;
+    int pivotOffset = pivotindex % 4096;
+    swap(bufferPool, pivotBlock, pivotOffset, rightBlock, rightIndex);
+    short pivot = bufferPool.getkey(bufferPool.getblock(rightBlock), rightIndex);
+    
+    // Perform three-way partitioning
+    int[] partitionResult = threeWayPartition(bufferPool, leftBlock, leftIndex, rightBlock, rightIndex, pivot);
+    int ltBlock = partitionResult[0];
+    int ltIndex = partitionResult[1];
+    int gtBlock = partitionResult[2];
+    int gtIndex = partitionResult[3];
+
+    // Recursively sort elements less than pivot
+    if (ltBlock > leftBlock || (ltBlock == leftBlock && ltIndex > leftIndex)) {
+        quicksort(bufferPool, leftBlock, leftIndex, ltBlock, ltIndex - 4); // -4 to move to the previous record
+    }
+
+    // Recursively sort elements greater than pivot
+    if (gtBlock < rightBlock || (gtBlock == rightBlock && gtIndex < rightIndex)) {
+        quicksort(bufferPool, gtBlock, gtIndex + 4, rightBlock, rightIndex); // +4 to move to the next record
+    }
+}
+
 
 
     /**

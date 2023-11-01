@@ -45,12 +45,6 @@ public class BufferPool implements BufferPoolADT {
     }
 
 
-    @Override
-    public void getbytes(byte[] space, int sz, int pos) {
-        // TODO Auto-generated method stub
-
-    }
-
 
     public short getkey(byte[] block, int index) {
         byte[] bytes = new byte[] { block[index], block[index + 1] };
@@ -83,6 +77,7 @@ public class BufferPool implements BufferPoolADT {
 
     @Override
     public void dirtyblock(int block) {
+        
         bufferModified[block] = 1;
     }
 

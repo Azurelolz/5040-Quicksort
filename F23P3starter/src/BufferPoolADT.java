@@ -8,10 +8,6 @@ public interface BufferPoolADT {
     public void insert(int blockIndex) throws Exception;
 
 
-    // Copy "sz" bytes from position "pos" of the buffered storage to "space"
-    public void getbytes(byte[] space, int sz, int pos);
-
-
     // Return pointer to the requested block
     public byte[] getblock(int block) throws Exception;
 
