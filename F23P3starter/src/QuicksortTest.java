@@ -2,8 +2,8 @@ import org.junit.Test;
 import student.TestCase;
 
 /**
- * @author {Your Name Here}
- * @version {Put Something Here}
+ * @author Yu-Kai Lo
+ * @version v 1.0
  */
 public class QuicksortTest extends TestCase {
     private CheckFile fileChecker;
@@ -55,21 +55,182 @@ public class QuicksortTest extends TestCase {
     }
 
 
-
     /**
-     * Test the main quicksort class.
+     * Test the main quicksort class with 1 ASCII block and 1 buffer.
      * 
      * @throws Exception
      */
     @Test
-    public void testQuickSort() throws Exception {
+    public void testQuickSortOneAsciiOnebuffer() throws Exception {
         String[] args = new String[3];
-        args[0] = "testinput.txt";
+        args[0] = "1Test.txt";
         args[1] = "1";
         args[2] = "statFile.txt";
-        Quicksort tree = new Quicksort();
+        Quicksort.generateFile("1Test.txt", "1", 'a');
         Quicksort.main(args);
         CheckFile checker = new CheckFile();
-        assertTrue(checker.checkFile("testinput.txt"));
+        assertTrue(checker.checkFile("1Test.txt"));
+    }
+
+
+    /**
+     * Test the main quicksort class with 1 Binary block and 1 buffer.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testQuickSortOneBinOnebuffer() throws Exception {
+        String[] args = new String[3];
+        args[0] = "1Test-b.txt";
+        args[1] = "1";
+        args[2] = "statFile.txt";
+        Quicksort.generateFile("1Test-b.txt", "1", 'b');
+        Quicksort.main(args);
+        CheckFile checker = new CheckFile();
+        assertTrue(checker.checkFile("1Test-b.txt"));
+    }
+
+
+    /**
+     * Test the main quicksort class with 10 ASCII blocks and 1 buffer.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testQuickSortTenAsciiOnebuffer() throws Exception {
+        String[] args = new String[3];
+        args[0] = "10Test.txt";
+        args[1] = "1";
+        args[2] = "statFile.txt";
+        Quicksort.generateFile("10Test.txt", "10", 'a');
+        Quicksort.main(args);
+        CheckFile checker = new CheckFile();
+        assertTrue(checker.checkFile("10Test.txt"));
+    }
+
+
+    /**
+     * Test the main quicksort class with 10 Binary blocks and 1 buffer.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testQuickSortTenBinOnebuffer() throws Exception {
+        String[] args = new String[3];
+        args[0] = "10Test-b.txt";
+        args[1] = "1";
+        args[2] = "statFile.txt";
+        Quicksort.generateFile("10Test-b.txt", "10", 'b');
+        Quicksort.main(args);
+        CheckFile checker = new CheckFile();
+        assertTrue(checker.checkFile("10Test-b.txt"));
+    }
+
+
+    /**
+     * Test the main quicksort class with 10 ASCII blocks and 10 buffers.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testQuickSortTenAsciiTenbuffer() throws Exception {
+        String[] args = new String[3];
+        args[0] = "10Test.txt";
+        args[1] = "10";
+        args[2] = "statFile.txt";
+        Quicksort.generateFile("10Test.txt", "10", 'a');
+        Quicksort.main(args);
+        CheckFile checker = new CheckFile();
+        assertTrue(checker.checkFile("10Test.txt"));
+    }
+
+
+    /**
+     * Test the main quicksort class with 10 Binary blocks and 10 buffers.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testQuickSortTenBinTenbuffer() throws Exception {
+        String[] args = new String[3];
+        args[0] = "10Test-b.txt";
+        args[1] = "10";
+        args[2] = "statFile.txt";
+        Quicksort.generateFile("10Test-b.txt", "10", 'b');
+        Quicksort.main(args);
+        CheckFile checker = new CheckFile();
+        assertTrue(checker.checkFile("10Test-b.txt"));
+    }
+
+
+    /**
+     * Test the main quicksort class with 100 ASCII blocks and 10 buffers.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testQuickSortHundredAsciiTenbuffer() throws Exception {
+        String[] args = new String[3];
+        args[0] = "100Test.txt";
+        args[1] = "10";
+        args[2] = "statFile.txt";
+        Quicksort.generateFile("100Test.txt", "100", 'a');
+        Quicksort.main(args);
+        CheckFile checker = new CheckFile();
+        assertTrue(checker.checkFile("100Test.txt"));
+    }
+
+
+    /**
+     * Test the main quicksort class with 100 Binary blocks and 10 buffers.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testQuickSortHundredBinTenbuffer() throws Exception {
+        String[] args = new String[3];
+        args[0] = "100Test-b.txt";
+        args[1] = "10";
+        args[2] = "statFile.txt";
+        Quicksort.generateFile("100Test-b.txt", "100", 'b');
+        Quicksort.main(args);
+        CheckFile checker = new CheckFile();
+        assertTrue(checker.checkFile("100Test-b.txt"));
+    }
+
+
+    /**
+     * Test the main quicksort class with 1000 ASCII blocks and 10 buffers.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testQuickSortThousandAsciiTenbuffer() throws Exception {
+        String[] args = new String[3];
+        args[0] = "1000Test.txt";
+        args[1] = "10";
+        args[2] = "statFile.txt";
+        Quicksort.generateFile("1000Test.txt", "1000", 'a');
+        Quicksort.main(args);
+        CheckFile checker = new CheckFile();
+        assertTrue(checker.checkFile("1000Test.txt"));
+    }
+
+
+    /**
+     * Test the main quicksort class with 1000 Binary blocks and 10 buffers.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testQuickSortThousandBinTenbuffer() throws Exception {
+        String[] args = new String[3];
+        args[0] = "1000Test-b.txt";
+        args[1] = "10";
+        args[2] = "statFile.txt";
+        Quicksort.generateFile("1000Test-b.txt", "1000", 'b');
+        Quicksort.main(args);
+        CheckFile checker = new CheckFile();
+        assertTrue(checker.checkFile("1000Test-b.txt"));
     }
 }
